@@ -1,0 +1,37 @@
+{
+    "enabled": true,
+    "require_authentication": true,
+    "whitelist_enabled": true,
+    "whitelisted_accounts": [
+        "shared@mm-international.co.jp",
+        "@mm-international.co.jp"
+    ],
+    "whitelisted_ips": [],
+    "allowed_file_types": [
+        "pdf",
+        "docx",
+        "txt",
+        "xlsx",
+        "pptx",
+        "csv",
+        "md"
+    ],
+    "max_file_size_mb": 100,
+    "audit_log_enabled": true,
+    "access_log_enabled": true,
+    "rate_limit": {
+        "enabled": true,
+        "max_requests_per_minute": 60,
+        "max_downloads_per_hour": 100
+    },
+    "alerts": {
+        "suspicious_activity": true,
+        "failed_access_attempts": 3,
+        "alert_email": "ai-support@mm-international.co.jp"
+    },
+    "encryption": {
+        "enabled": true,
+        "encrypt_tokens": true
+    }
+}
+

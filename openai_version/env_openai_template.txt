@@ -1,0 +1,16 @@
+# OpenAI API Key
+# https://platform.openai.com/api-keys から取得してください
+OPENAI_API_KEY=your_openai_api_key_here
+
+# 認証設定（既存のものをそのまま使用）
+APP_PASSWORD=your_secure_password
+
+# セッションタイムアウト（分）
+SESSION_TIMEOUT_MINUTES=30
+
+# 最大ログイン試行回数
+MAX_LOGIN_ATTEMPTS=3
+
+# IPアドレス制限（カンマ区切り、オプション）
+# ALLOWED_IPS=192.168.1.100,192.168.1.101
+

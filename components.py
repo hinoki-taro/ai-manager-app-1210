@@ -35,6 +35,47 @@ def display_select_mode():
         )
 
 
+def display_help_section():
+    """
+    ヘルプセクションの表示
+    """
+    with st.sidebar:
+        st.markdown("---")
+        with st.expander("📚 ヘルプ・使い方", expanded=False):
+            st.markdown("""
+#### 🎯 クイックガイド
+
+**質問のコツ:**
+- ✅ 具体的に聞く
+- ✅ 1つずつ質問
+- ✅ キーワードを含める
+
+**質問例:**
+```
+「有給休暇の申請方法は？」
+「経費精算の期限はいつ？」
+「会議室の予約方法を教えて」
+```
+
+**困ったときは:**
+- 🔄 履歴をクリア
+- 🔀 モードを切り替え
+- 📝 質問を変えてみる
+
+**サポート:**
+#ai-search-support
+            """)
+            
+            # ドキュメントへのリンク
+            st.markdown("---")
+            st.markdown("""
+**📖 詳細ガイド:**
+- [利用ガイド](USER_GUIDE.md)
+- [よくある質問](FAQ.md)
+- [トラブル対処](TROUBLESHOOTING.md)
+            """)
+
+
 def display_initial_ai_message():
     """
     AIメッセージの初期表示

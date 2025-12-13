@@ -11,6 +11,10 @@ from dotenv import load_dotenv
 import logging
 # streamlitアプリの表示を担当するモジュール
 import streamlit as st
+# （自作）認証・アクセス制御モジュール
+import auth
+# （自作）フィードバック機能モジュール
+import feedback
 # （自作）画面表示以外の様々な関数が定義されているモジュール
 import utils
 # （自作）アプリ起動時に実行される初期化処理が記述された関数
@@ -19,6 +23,8 @@ from initialize import initialize
 import components as cn
 # （自作）変数（定数）がまとめて定義・管理されているモジュール
 import constants as ct
+# （自作）ロゴ・アバター管理モジュール
+import avatar_manager
 
 
 ############################################################
@@ -29,12 +35,66 @@ st.set_page_config(
     page_title=ct.APP_NAME
 )
 
+# カスタムCSSでフォントサイズを大きく設定
+st.markdown("""
+<style>
+    /* 全体のフォントサイズを16pxに設定 */
+    html, body, [class*="css"] {
+        font-size: 16px;
+    }
+    
+    /* 入力欄とボタンのフォントサイズ */
+    .stTextInput, .stTextArea, .stSelectbox, .stMultiSelect, .stNumberInput {
+        font-size: 16px;
+    }
+    
+    /* チャットメッセージのフォントサイズ */
+    .stChatMessage {
+        font-size: 16px;
+    }
+    
+    /* サイドバーのフォントサイズ */
+    .css-1d391kg, [data-testid="stSidebar"] {
+        font-size: 16px;
+    }
+    
+    /* マークダウンテキストのフォントサイズ */
+    .stMarkdown {
+        font-size: 16px;
+    }
+    
+    /* ラジオボタン、チェックボックスなどのフォントサイズ */
+    .stRadio label, .stCheckbox label {
+        font-size: 16px;
+    }
+    
+    /* チャット入力欄のフォントサイズ */
+    .stChatInputContainer textarea {
+        font-size: 16px;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# アバター・ロゴ用のスタイルを適用
+avatar_manager.apply_avatar_styles()
+
 # ログ出力を行うためのロガーの設定
 logger = logging.getLogger(ct.LOGGER_NAME)
 
 
 ############################################################
-# 3. 初期化処理
+# 3. 認証チェック
+############################################################
+# アクセス制御が有効な場合、認証を要求
+if not auth.check_password():
+    st.stop()
+
+# ログアウトボタンをサイドバーに追加
+auth.add_logout_button()
+
+
+############################################################
+# 4. 初期化処理
 ############################################################
 try:
     # 初期化処理（「initialize.py」の「initialize」関数を実行）
@@ -56,11 +116,26 @@ if not "initialized" in st.session_state:
 ############################################################
 # 4. 初期表示
 ############################################################
+# ロゴとアバターをサイドバーに表示
+avatar_manager.show_sidebar_branding()
+
 # タイトル表示
 cn.display_app_title()
 
+# 初回アクセス時にウェルカム画面を表示
+if "welcome_shown" not in st.session_state:
+    avatar_manager.show_welcome_screen()
+    st.session_state.welcome_shown = True
+    st.markdown("---")
+
 # モード表示
 cn.display_select_mode()
+
+# ヘルプセクション表示
+cn.display_help_section()
+
+# フィードバックフォーム表示
+feedback.display_feedback_form()
 
 # AIメッセージの初期表示
 cn.display_initial_ai_message()

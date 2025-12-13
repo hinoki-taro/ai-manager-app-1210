@@ -1,5 +1,6 @@
 """
 このファイルは、最初の画面読み込み時にのみ実行される初期化処理が記述されたファイルです。
+【OpenAI版】
 """
 
 ############################################################
@@ -16,7 +17,7 @@ import streamlit as st
 from docx import Document
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_text_splitters import CharacterTextSplitter
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
 import constants as ct
 
@@ -118,8 +119,8 @@ def initialize_retriever():
         for key in doc.metadata:
             doc.metadata[key] = adjust_string(doc.metadata[key])
     
-    # 埋め込みモデルの用意（Google Gemini）
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    # 埋め込みモデルの用意（OpenAI）
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
     
     # チャンク分割用のオブジェクトを作成
     text_splitter = CharacterTextSplitter(
@@ -242,3 +243,4 @@ def adjust_string(s):
     
     # OSがWindows以外の場合はそのまま返す
     return s
+

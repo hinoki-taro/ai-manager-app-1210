@@ -61,6 +61,40 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
+# Security
+access_log.json
+security_config.json
+
+# LangChain
+langchain_log.json
+query_cache.json
+
+# API切り替え用バックアップ
+utils_gemini_backup.py
+utils_openai_backup.py
+initialize_gemini_backup.py
+initialize_openai_backup.py
+
+# 画像アセット（実際の画像のみ、READMEは管理）
+assets/images/*.png
+assets/images/*.jpg
+assets/images/*.jpeg
+assets/images/*.gif
+!assets/images/README.md
+
+# Google Drive認証情報・設定
+google_drive_credentials*.json
+google_drive_token*.pickle
+google_drive_config.json
+google_drive_security_config.json
+
+# Google Driveダウンロードファイル
+data/google_drive/
+
+# Google Driveセキュリティログ
+logs/google_drive_audit.json
+logs/google_drive_access.json
+
 # Flask stuff:
 instance/
 .webassets-cache
@@ -164,3 +198,48 @@ cython_debug/
 # original
 .chroma/
 logs/
+
+# ==========================================
+# セキュリティ関連（重要！）
+# ==========================================
+# APIキーを含むファイル
+.env
+.env.local
+.env.*.local
+
+# Streamlit secrets
+.streamlit/secrets.toml
+
+# 社内データ（公開厳禁）
+data/
+data_backup/
+
+# フィードバックデータ
+feedback/
+
+# データベース
+*.db
+*.sqlite
+
+# バックアップファイル
+*.bak
+*.backup
+
+# 一時ファイル
+*.tmp
+*.temp
+
+# システムファイル
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEの設定
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 起動スクリプト（APIキーを含む場合は除外）
+# start_app.bat

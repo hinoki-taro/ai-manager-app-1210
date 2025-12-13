@@ -1,5 +1,6 @@
 """
 このファイルは、画面表示以外の様々な関数定義のファイルです。
+【OpenAI版】
 """
 
 ############################################################
@@ -11,7 +12,7 @@ from dotenv import load_dotenv
 import streamlit as st
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.messages import HumanMessage
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
 from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 import constants as ct
@@ -71,7 +72,7 @@ def build_error_message(message):
 
 def get_llm_response(chat_message):
     """
-    LLMからの回答取得（強化版）
+    LLMからの回答取得（OpenAI版・強化版）
     
     機能：
     - 入力検証
@@ -142,9 +143,9 @@ def get_llm_response(chat_message):
                 "from_cache": True
             }
         
-        # 4. LLMのオブジェクトを用意（Google Gemini）
-        llm = ChatGoogleGenerativeAI(
-            model=ct.MODEL,
+        # 4. LLMのオブジェクトを用意（OpenAI）
+        llm = ChatOpenAI(
+            model=ct.MODEL_OPENAI,  # OpenAI用のモデル
             temperature=ct.TEMPERATURE,
             max_retries=2  # リトライ回数を設定
         )
@@ -240,3 +241,4 @@ def get_llm_response(chat_message):
         )
         
         return None
+

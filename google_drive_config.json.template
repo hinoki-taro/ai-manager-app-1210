@@ -1,0 +1,52 @@
+{
+    "enabled": false,
+    "accounts": [
+        {
+            "name": "社内共有アカウント",
+            "email": "your-account@mm-international.co.jp",
+            "credentials_file": "google_drive_credentials.json",
+            "token_file": "google_drive_token.pickle",
+            "active": true
+        },
+        {
+            "name": "管理部アカウント",
+            "email": "another-account@mm-international.co.jp",
+            "credentials_file": "google_drive_credentials_admin.json",
+            "token_file": "google_drive_token_admin.pickle",
+            "active": false
+        }
+    ],
+    "folders": [
+        {
+            "name": "社内文書",
+            "folder_id": "YOUR_GOOGLE_DRIVE_FOLDER_ID_HERE",
+            "local_path": "./data/google_drive/社内文書",
+            "sync": true,
+            "file_types": ["pdf", "docx", "txt", "csv"],
+            "account": "社内共有アカウント"
+        },
+        {
+            "name": "メディアについて",
+            "folder_id": "YOUR_GOOGLE_DRIVE_FOLDER_ID_HERE",
+            "local_path": "./data/google_drive/メディアについて",
+            "sync": true,
+            "file_types": ["pdf", "docx", "pptx"],
+            "account": "社内共有アカウント"
+        },
+        {
+            "name": "顧客について",
+            "folder_id": "YOUR_GOOGLE_DRIVE_FOLDER_ID_HERE",
+            "local_path": "./data/google_drive/顧客について",
+            "sync": true,
+            "file_types": ["pdf", "xlsx", "csv"],
+            "account": "社内共有アカウント"
+        }
+    ],
+    "sync_on_startup": false,
+    "auto_sync_interval_minutes": 60,
+    "shared_drives": {
+        "enabled": false,
+        "drive_ids": []
+    }
+}
+
