@@ -211,8 +211,13 @@ logs/
 .streamlit/secrets.toml
 
 # 社内データ（公開厳禁）
-data/
+# 機密情報を含むフォルダのみ除外
+data/MTG議事録/
+data/顧客について/
+data/会社について/
 data_backup/
+
+# data/メディアについて/ は公開情報なのでGitに含める
 
 # フィードバックデータ
 feedback/
