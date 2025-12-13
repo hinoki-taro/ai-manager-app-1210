@@ -124,11 +124,24 @@ def initialize_retriever():
         st.success("✓ テキストの正規化が完了しました")
         
         st.info("🔄 埋め込みモデルを初期化しています...")
+        
+        # デバッグ: Secretsの状態を確認
+        st.write("📋 デバッグ情報:")
+        st.write(f"環境変数 GOOGLE_API_KEY: {'設定あり' if os.getenv('GOOGLE_API_KEY') else '設定なし'}")
+        st.write(f"Secrets keys: {list(st.secrets.keys())}")
+        
         # APIキーの取得（環境変数またはStreamlit Secrets）
-        google_api_key = os.getenv("GOOGLE_API_KEY") or st.secrets.get("GOOGLE_API_KEY")
+        google_api_key = os.getenv("GOOGLE_API_KEY")
+        
+        if not google_api_key and "GOOGLE_API_KEY" in st.secrets:
+            google_api_key = st.secrets["GOOGLE_API_KEY"]
         
         if not google_api_key:
+            st.error("❌ GOOGLE_API_KEY が見つかりません")
+            st.write("利用可能なSecretsのキー:", list(st.secrets.keys()))
             raise ValueError("GOOGLE_API_KEY が設定されていません。Streamlit CloudのSecretsで設定してください。")
+        
+        st.success(f"✓ APIキーを取得しました（先頭10文字: {google_api_key[:10]}...）")
         
         # 埋め込みモデルの用意（Google Gemini）- APIキーを明示的に渡す
         embeddings = GoogleGenerativeAIEmbeddings(
