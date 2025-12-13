@@ -143,10 +143,17 @@ def get_llm_response(chat_message):
             }
         
         # 4. LLMのオブジェクトを用意（Google Gemini）
+        # APIキーの取得（環境変数またはStreamlit Secrets）
+        google_api_key = os.getenv("GOOGLE_API_KEY") or st.secrets.get("GOOGLE_API_KEY")
+        
+        if not google_api_key:
+            raise ValueError("GOOGLE_API_KEY が設定されていません。")
+        
         llm = ChatGoogleGenerativeAI(
             model=ct.MODEL,
             temperature=ct.TEMPERATURE,
-            max_retries=2  # リトライ回数を設定
+            max_retries=2,  # リトライ回数を設定
+            google_api_key=google_api_key  # APIキーを明示的に渡す
         )
 
         # 5. 会話履歴なしでもLLMに理解してもらえる、独立した入力テキストを取得するためのプロンプトテンプレートを作成

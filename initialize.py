@@ -124,8 +124,17 @@ def initialize_retriever():
         st.success("✓ テキストの正規化が完了しました")
         
         st.info("🔄 埋め込みモデルを初期化しています...")
-        # 埋め込みモデルの用意（Google Gemini）
-        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+        # APIキーの取得（環境変数またはStreamlit Secrets）
+        google_api_key = os.getenv("GOOGLE_API_KEY") or st.secrets.get("GOOGLE_API_KEY")
+        
+        if not google_api_key:
+            raise ValueError("GOOGLE_API_KEY が設定されていません。Streamlit CloudのSecretsで設定してください。")
+        
+        # 埋め込みモデルの用意（Google Gemini）- APIキーを明示的に渡す
+        embeddings = GoogleGenerativeAIEmbeddings(
+            model="models/embedding-001",
+            google_api_key=google_api_key
+        )
         st.success("✓ 埋め込みモデルの初期化が完了しました")
         
         st.info("🔄 ドキュメントを分割しています...")
