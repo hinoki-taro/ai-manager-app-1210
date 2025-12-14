@@ -277,14 +277,6 @@ def check_password() -> bool:
     st.markdown("# 🔒 アクセス認証")
     st.markdown("---")
     
-    # セキュリティ情報の表示
-    with st.expander("🛡️ セキュリティ情報"):
-        st.markdown(f"""
-        - **セッションタイムアウト：** {timeout_minutes}分
-        - **ログイン試行制限：** {max_attempts}回まで（IPアドレス別・6時間ロックアウト）
-        - **アクセスログ：** IPアドレス付きで記録されています
-        """)
-    
     st.info("この社内アプリにアクセスするには、パスワードを入力してください。")
     
     with st.form("auth_form"):
