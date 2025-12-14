@@ -101,6 +101,8 @@ def initialize_session_id():
 def initialize_retriever():
     """
     画面読み込み時にRAGのRetriever（ベクターストアから検索するオブジェクト）を作成
+    
+    既存のベクターストアがあればそれを読み込み、なければエラーを表示
     """
     # ロガーを読み込むことで、後続の処理中に発生したエラーなどがログファイルに記録される
     logger = logging.getLogger(ct.LOGGER_NAME)
@@ -110,66 +112,75 @@ def initialize_retriever():
         return
     
     try:
-        st.info("🔄 データを読み込んでいます...")
-        # RAGの参照先となるデータソースの読み込み
-        docs_all = load_data_sources()
-        st.success(f"✓ {len(docs_all)}個のドキュメントを読み込みました")
-
-        st.info("🔄 テキストを正規化しています...")
-        # OSがWindowsの場合、Unicode正規化と、cp932（Windows用の文字コード）で表現できない文字を除去
-        for doc in docs_all:
-            doc.page_content = adjust_string(doc.page_content)
-            for key in doc.metadata:
-                doc.metadata[key] = adjust_string(doc.metadata[key])
-        st.success("✓ テキストの正規化が完了しました")
+        # ベクターストアのパス
+        vectorstore_path = "./vectorstore"
         
-        st.info("🔄 埋め込みモデルを初期化しています...")
-        
-        # デバッグ: Secretsの状態を確認
-        st.write("📋 デバッグ情報:")
-        st.write(f"環境変数 GOOGLE_API_KEY: {'設定あり' if os.getenv('GOOGLE_API_KEY') else '設定なし'}")
-        st.write(f"Secrets keys: {list(st.secrets.keys())}")
-        
-        # APIキーの取得（環境変数またはStreamlit Secrets）
-        google_api_key = os.getenv("GOOGLE_API_KEY")
-        
-        if not google_api_key and "GOOGLE_API_KEY" in st.secrets:
-            google_api_key = st.secrets["GOOGLE_API_KEY"]
-        
-        if not google_api_key:
-            st.error("❌ GOOGLE_API_KEY が見つかりません")
-            st.write("利用可能なSecretsのキー:", list(st.secrets.keys()))
-            raise ValueError("GOOGLE_API_KEY が設定されていません。Streamlit CloudのSecretsで設定してください。")
-        
-        st.success(f"✓ APIキーを取得しました（先頭10文字: {google_api_key[:10]}...）")
-        
-        # 埋め込みモデルの用意（Google Gemini）- APIキーを明示的に渡す
-        embeddings = GoogleGenerativeAIEmbeddings(
-            model="models/embedding-001",
-            google_api_key=google_api_key
-        )
-        st.success("✓ 埋め込みモデルの初期化が完了しました")
-        
-        st.info("🔄 ドキュメントを分割しています...")
-        # チャンク分割用のオブジェクトを作成
-        text_splitter = CharacterTextSplitter(
-            chunk_size=ct.CHUNK_SIZE,
-            chunk_overlap=ct.CHUNK_OVERLAP,
-            separator="\n"
-        )
-
-        # チャンク分割を実施
-        splitted_docs = text_splitter.split_documents(docs_all)
-        st.success(f"✓ {len(splitted_docs)}個のチャンクに分割しました")
-
-        st.info("🔄 ベクターストアを作成しています（これには数分かかる場合があります）...")
-        # ベクターストアの作成
-        db = Chroma.from_documents(splitted_docs, embedding=embeddings)
-        st.success("✓ ベクターストアの作成が完了しました")
-
-        # ベクターストアを検索するRetrieverの作成
-        st.session_state.retriever = db.as_retriever(search_kwargs={"k": ct.RETRIEVER_SEARCH_K})
-        st.success("✅ 初期化が正常に完了しました！")
+        # 既存のベクターストアが存在するか確認
+        if os.path.exists(vectorstore_path):
+            # 既存のベクターストアを読み込む
+            st.info("🔄 事前作成されたベクターストアを読み込んでいます...")
+            
+            # APIキーの取得（どちらのAPIキーが設定されているかを確認）
+            openai_api_key = os.getenv("OPENAI_API_KEY")
+            google_api_key = os.getenv("GOOGLE_API_KEY")
+            
+            # Streamlit Secretsからも取得を試みる
+            if not openai_api_key and "OPENAI_API_KEY" in st.secrets:
+                openai_api_key = st.secrets["OPENAI_API_KEY"]
+            if not google_api_key and "GOOGLE_API_KEY" in st.secrets:
+                google_api_key = st.secrets["GOOGLE_API_KEY"]
+            
+            # どちらの埋め込みモデルを使うかを決定
+            # OpenAI APIキーがある場合は OpenAI Embeddings を優先
+            # それ以外は Google Gemini Embeddings を使用
+            if openai_api_key:
+                st.info("💡 OpenAI Embeddings を使用します")
+                from langchain_openai import OpenAIEmbeddings
+                embeddings = OpenAIEmbeddings(
+                    model=ct.EMBEDDING_MODEL_OPENAI,
+                    openai_api_key=openai_api_key
+                )
+            elif google_api_key:
+                st.info("💡 Google Gemini Embeddings を使用します（完全無料）")
+                embeddings = GoogleGenerativeAIEmbeddings(
+                    model=ct.EMBEDDING_MODEL,
+                    google_api_key=google_api_key
+                )
+            else:
+                st.error("❌ OPENAI_API_KEY または GOOGLE_API_KEY が見つかりません")
+                st.write("利用可能なSecretsのキー:", list(st.secrets.keys()))
+                raise ValueError(
+                    "OPENAI_API_KEY または GOOGLE_API_KEY が設定されていません。\n"
+                    "Streamlit CloudのSecretsで設定してください。"
+                )
+            
+            # 既存のベクターストアを読み込み
+            db = Chroma(
+                persist_directory=vectorstore_path,
+                embedding_function=embeddings
+            )
+            
+            st.success("✓ ベクターストアの読み込みが完了しました")
+            
+            # ベクターストアを検索するRetrieverの作成
+            st.session_state.retriever = db.as_retriever(search_kwargs={"k": ct.RETRIEVER_SEARCH_K})
+            st.success("✅ 初期化が正常に完了しました！")
+            logger.info("ベクターストアを読み込みました")
+            
+        else:
+            # ベクターストアが存在しない場合はエラー
+            error_msg = (
+                "ベクターストアが見つかりません。\n\n"
+                "ローカル環境で以下を実行してください:\n"
+                "1. python create_vectorstore_local.py\n"
+                "2. git add vectorstore/\n"
+                "3. git commit -m 'Add vectorstore'\n"
+                "4. git push origin main\n"
+                "5. Streamlit Cloudでアプリを再起動"
+            )
+            st.error(f"❌ {error_msg}")
+            logger.error(error_msg)
+            raise FileNotFoundError(error_msg)
         
     except Exception as e:
         error_msg = f"初期化中にエラーが発生しました: {str(e)}"

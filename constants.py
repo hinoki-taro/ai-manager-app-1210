@@ -43,6 +43,10 @@ APP_BOOT_MESSAGE = "アプリが起動されました。"
 MODEL = "gemini-1.5-flash"
 # OpenAI モデル（gpt-4o-mini: 高速・低コスト, gpt-4o: 高性能）
 MODEL_OPENAI = "gpt-4o-mini"
+# Google Gemini 埋め込みモデル
+EMBEDDING_MODEL = "models/embedding-001"
+# OpenAI 埋め込みモデル
+EMBEDDING_MODEL_OPENAI = "text-embedding-3-small"
 TEMPERATURE = 0.5
 
 

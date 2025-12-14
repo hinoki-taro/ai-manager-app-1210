@@ -34,7 +34,7 @@ https://share.streamlit.io/
 
 ### ステップ2: 新しいアプリを作成
 
-1. 画面右上の **「New app」** ボタンをクリック
+1. 画面右上の **「New app」** ボタン（＝Create app）をクリック
 
 ---
 
