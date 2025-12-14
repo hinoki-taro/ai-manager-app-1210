@@ -304,8 +304,9 @@ def add_logout_button():
                 
                 remaining_minutes = timeout_minutes - elapsed_minutes
                 
-                st.caption(f"🔐 ログイン中")
-                st.caption(f"⏱️ セッション残り時間: 約{remaining_minutes}分")
+                # ログイン情報の表示を削除
+                # st.caption(f"🔐 ログイン中")
+                # st.caption(f"⏱️ セッション残り時間: 約{remaining_minutes}分")
             
             if st.button("🚪 ログアウト", use_container_width=True):
                 st.session_state.authenticated = False

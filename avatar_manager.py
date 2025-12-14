@@ -354,13 +354,12 @@ def show_welcome_screen():
 
 def show_sidebar_branding():
     """
-    サイドバーにロゴとアバターを表示
+    サイドバーにアバターを表示（ロゴは削除）
     """
     with st.sidebar:
-        # ロゴ（小さめ）
-        LogoManager.show_logo(width=150, use_column=False)
-        
-        st.markdown("---")
+        # ロゴを削除
+        # LogoManager.show_logo(width=150, use_column=False)
+        # st.markdown("---")
         
         # アバター（中サイズ、中央配置、動くアニメーション）
         col1, col2, col3 = st.columns([0.5, 2, 0.5])
