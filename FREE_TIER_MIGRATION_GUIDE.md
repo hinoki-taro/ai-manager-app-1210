@@ -297,3 +297,5 @@ max_login_attempts = 5
 **アプリ名:** mmi-ai-manager  
 **バージョン:** 1.0
 
+
+

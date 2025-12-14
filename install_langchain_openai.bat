@@ -36,3 +36,5 @@ echo .envファイルにOPENAI_API_KEYを設定してください
 echo.
 pause
 
+
+

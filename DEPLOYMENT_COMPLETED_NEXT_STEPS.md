@@ -283,3 +283,5 @@ client_email = "ai-search-service@your-project.iam.gserviceaccount.com"
 *作成日：2025年12月13日*  
 *株式会社エムエムインターナショナル*
 
+
+

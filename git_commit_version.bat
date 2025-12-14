@@ -117,3 +117,5 @@ echo 2. 動作確認
 echo.
 pause
 
+
+

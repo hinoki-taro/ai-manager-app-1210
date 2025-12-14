@@ -274,3 +274,5 @@ streamlit run google_drive_manager.py
 *所要時間合計: 約5-7分*  
 *株式会社エムエムインターナショナル*
 
+
+
