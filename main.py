@@ -13,8 +13,6 @@ import logging
 import streamlit as st
 # （自作）認証・アクセス制御モジュール
 import auth
-# （自作）フィードバック機能モジュール
-import feedback
 # （自作）画面表示以外の様々な関数が定義されているモジュール
 import utils
 # （自作）アプリ起動時に実行される初期化処理が記述された関数
@@ -130,15 +128,6 @@ if "welcome_shown" not in st.session_state:
 
 # モード表示
 cn.display_select_mode()
-
-# ヘルプセクション表示
-cn.display_help_section()
-
-# フィードバックフォーム表示
-feedback.display_feedback_form()
-
-# AIメッセージの初期表示
-cn.display_initial_ai_message()
 
 
 ############################################################
