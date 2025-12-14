@@ -48,13 +48,81 @@ def get_source_icon(source):
     Returns:
         メッセージと一緒に表示するアイコンの種類
     """
-    # 参照元がWebページの場合とファイルの場合で、取得するアイコンの種類を変える
+    # 参照元がWebページの場合
     if source.startswith("http"):
-        icon = ct.LINK_SOURCE_ICON
-    else:
-        icon = ct.DOC_SOURCE_ICON
+        return ct.LINK_SOURCE_ICON
     
-    return icon
+    # ファイルの場合、拡張子に応じてアイコンを変更
+    import os
+    ext = os.path.splitext(source)[1].lower()
+    
+    # ファイル形式ごとのアイコンマッピング
+    icon_map = {
+        ".pdf": "📄",
+        ".docx": "📘",
+        ".doc": "📘",
+        ".xlsx": "📊",
+        ".xls": "📊",
+        ".csv": "📊",
+        ".pptx": "📊",
+        ".ppt": "📊",
+        ".txt": "📝",
+        ".md": "📝",
+        ".jpg": "🖼️",
+        ".jpeg": "🖼️",
+        ".png": "🖼️",
+        ".gif": "🖼️",
+        ".bmp": "🖼️",
+        ".webp": "🖼️",
+        ".mp4": "🎥",
+        ".avi": "🎥",
+        ".mov": "🎥",
+        ".wmv": "🎥",
+        ".mkv": "🎥"
+    }
+    
+    return icon_map.get(ext, ct.DOC_SOURCE_ICON)
+
+
+def get_file_type_label(source):
+    """
+    ファイルの種類ラベルを取得
+
+    Args:
+        source: 参照元のありか
+
+    Returns:
+        ファイルの種類ラベル（例: "PDFファイル", "Excelファイル"）
+    """
+    import os
+    ext = os.path.splitext(source)[1].lower()
+    
+    # ファイル形式ごとのラベルマッピング
+    type_map = {
+        ".pdf": "PDFファイル",
+        ".docx": "Wordファイル",
+        ".doc": "Wordファイル",
+        ".xlsx": "Excelファイル",
+        ".xls": "Excelファイル",
+        ".csv": "CSVファイル",
+        ".pptx": "PowerPointファイル",
+        ".ppt": "PowerPointファイル",
+        ".txt": "テキストファイル",
+        ".md": "Markdownファイル",
+        ".jpg": "画像ファイル",
+        ".jpeg": "画像ファイル",
+        ".png": "画像ファイル",
+        ".gif": "画像ファイル",
+        ".bmp": "画像ファイル",
+        ".webp": "画像ファイル",
+        ".mp4": "動画ファイル",
+        ".avi": "動画ファイル",
+        ".mov": "動画ファイル",
+        ".wmv": "動画ファイル",
+        ".mkv": "動画ファイル"
+    }
+    
+    return type_map.get(ext, "ファイル")
 
 
 def build_error_message(message):
