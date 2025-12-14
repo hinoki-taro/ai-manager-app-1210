@@ -119,7 +119,8 @@ def initialize_retriever():
         # 既存のベクターストアが存在するか確認
         if os.path.exists(vectorstore_path):
             # 既存のベクターストアを読み込む
-            st.info("🔄 事前作成されたベクターストアを読み込んでいます...")
+            # ベクターストアを読み込み中（ログのみ）
+            logger.info("事前作成されたベクターストアを読み込んでいます")
             
             # APIキーの取得（どちらのAPIキーが設定されているかを確認）
             openai_api_key = os.getenv("OPENAI_API_KEY")
@@ -134,7 +135,7 @@ def initialize_retriever():
             # ベクターストアはOpenAI Embeddingsで作成されているため、
             # 読み込み時もOpenAI Embeddingsを使用する必要があります
             if openai_api_key:
-                st.info("💡 OpenAI Embeddings を使用してベクターストアを読み込みます")
+                logger.info("OpenAI Embeddings を使用してベクターストアを読み込みます")
                 from langchain_openai import OpenAIEmbeddings
                 embeddings = OpenAIEmbeddings(
                     model=ct.EMBEDDING_MODEL_OPENAI,
@@ -172,19 +173,19 @@ def initialize_retriever():
             try:
                 collection = db._collection
                 doc_count = collection.count()
-                st.info(f"📊 ベクターストア内のドキュメント数: {doc_count}件")
+                logger.info(f"ベクターストア内のドキュメント数: {doc_count}件")
                 
                 if doc_count == 0:
                     st.error("⚠️ ベクターストアが空です！ベクターストアを再作成する必要があります。")
                 else:
-                    st.success(f"✓ ベクターストアの読み込みが完了しました（{doc_count}件のドキュメント）")
+                    logger.info(f"ベクターストアの読み込みが完了しました（{doc_count}件のドキュメント）")
             except Exception as e:
                 st.warning(f"ベクターストアの確認中にエラー: {e}")
-                st.success("✓ ベクターストアの読み込みが完了しました")
+                logger.info("ベクターストアの読み込みが完了しました")
             
             # ベクターストアを検索するRetrieverの作成
             st.session_state.retriever = db.as_retriever(search_kwargs={"k": ct.RETRIEVER_SEARCH_K})
-            st.success("✅ 初期化が正常に完了しました！")
+            # 初期化完了（ログのみ）
             logger.info("ベクターストアを読み込みました")
             
         else:
