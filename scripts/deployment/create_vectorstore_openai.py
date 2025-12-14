@@ -12,6 +12,12 @@ import os
 import sys
 from pathlib import Path
 
+# Windows環境でのUnicodeエラー回避
+if sys.platform == 'win32':
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
 # プロジェクトルートをPythonパスに追加
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
@@ -36,24 +42,24 @@ def create_vectorstore():
     print("=" * 60)
     print("ベクターストア作成スクリプト (OpenAI API)")
     print("=" * 60)
-    print(f"📁 作業ディレクトリ: {os.getcwd()}")
+    print(f"[+] 作業ディレクトリ: {os.getcwd()}")
     print("=" * 60)
     
     # ステップ1: データの読み込み
-    print("\n🔄 データを読み込んでいます...")
+    print("\n[*] データを読み込んでいます...")
     docs_all = load_data_sources()
-    print(f"✓ {len(docs_all)}個のドキュメントを読み込みました")
+    print(f"[OK] {len(docs_all)}個のドキュメントを読み込みました")
     
     # ステップ2: テキストの正規化
-    print("\n🔄 テキストを正規化しています...")
+    print("\n[*] テキストを正規化しています...")
     for doc in docs_all:
         doc.page_content = adjust_string(doc.page_content)
         for key in doc.metadata:
             doc.metadata[key] = adjust_string(doc.metadata[key])
-    print("✓ テキストの正規化が完了しました")
+    print("[OK] テキストの正規化が完了しました")
     
     # ステップ3: 埋め込みモデルの初期化
-    print("\n🔄 埋め込みモデルを初期化しています...")
+    print("\n[*] 埋め込みモデルを初期化しています...")
     openai_api_key = os.getenv("OPENAI_API_KEY")
     
     if not openai_api_key:
@@ -63,7 +69,7 @@ def create_vectorstore():
             'OPENAI_API_KEY="your-api-key-here"'
         )
     
-    print(f"✓ APIキーを取得しました（先頭10文字: {openai_api_key[:10]}...）")
+    print(f"[OK] APIキーを取得しました（先頭10文字: {openai_api_key[:10]}...）")
     
     # OpenAI Embeddingsを使用（バッチサイズを制御）
     embeddings = OpenAIEmbeddings(
@@ -71,24 +77,24 @@ def create_vectorstore():
         openai_api_key=openai_api_key,
         chunk_size=100  # 1回のAPIリクエストで処理するテキスト数を制限
     )
-    print("✓ 埋め込みモデルの初期化が完了しました")
+    print("[OK] 埋め込みモデルの初期化が完了しました")
     print("  - バッチサイズ: 100テキスト/リクエスト（トークン制限対応）")
     
     # ステップ4: ドキュメントの分割
-    print("\n🔄 ドキュメントを分割しています...")
+    print("\n[*] ドキュメントを分割しています...")
     text_splitter = CharacterTextSplitter(
         chunk_size=ct.CHUNK_SIZE,
         chunk_overlap=ct.CHUNK_OVERLAP,
         separator="\n"
     )
     splitted_docs = text_splitter.split_documents(docs_all)
-    print(f"✓ {len(splitted_docs)}個のチャンクに分割しました")
+    print(f"[OK] {len(splitted_docs)}個のチャンクに分割しました")
     
     # ステップ5: ベクターストアの作成と保存
-    print("\n🔄 ベクターストアを作成しています（これには数分かかる場合があります）...")
-    print("⚠️ この処理中にOpenAI APIのクォータを消費します（少額の費用）")
-    print(f"📊 処理: {len(splitted_docs)}チャンク ÷ 100 = 約{len(splitted_docs)//100 + 1}回のAPIリクエスト")
-    print("⏳ 予想時間: 3～5分")
+    print("\n[*] ベクターストアを作成しています（これには数分かかる場合があります）...")
+    print("[!] この処理中にOpenAI APIのクォータを消費します（少額の費用）")
+    print(f"[+] 処理: {len(splitted_docs)}チャンク / 100 = 約{len(splitted_docs)//100 + 1}回のAPIリクエスト")
+    print("[+] 予想時間: 3～5分")
     
     # persist_directoryを指定してローカルに保存
     db = Chroma.from_documents(
@@ -97,11 +103,11 @@ def create_vectorstore():
         persist_directory="./vectorstore"  # ローカルディレクトリに保存
     )
     
-    print("✓ ベクターストアの作成が完了しました")
-    print(f"✓ ベクターストアを保存しました: ./vectorstore/")
+    print("[OK] ベクターストアの作成が完了しました")
+    print(f"[OK] ベクターストアを保存しました: ./vectorstore/")
     
     print("\n" + "=" * 60)
-    print("✅ 完了！")
+    print("[SUCCESS] 完了！")
     print("=" * 60)
     print("\n次のステップ:")
     print("1. vectorstore/ フォルダが作成されたことを確認")
@@ -112,15 +118,15 @@ def create_vectorstore():
     print('   git commit -m "Add pre-built vectorstore (OpenAI)"')
     print("   git push origin main")
     print("3. Streamlit Cloudでアプリを再起動")
-    print("\n💰 コスト:")
-    print(f"   - {len(splitted_docs)}チャンク × OpenAI Embedding API")
+    print("\n[$] コスト:")
+    print(f"   - {len(splitted_docs)}チャンク x OpenAI Embedding API")
     print(f"   - 推定コスト: 約$0.02-0.05（3-7円程度）")
 
 if __name__ == "__main__":
     try:
         create_vectorstore()
     except Exception as e:
-        print(f"\n❌ エラーが発生しました: {e}")
+        print(f"\n[ERROR] エラーが発生しました: {e}")
         print("\n詳細:")
         import traceback
         traceback.print_exc()

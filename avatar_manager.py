@@ -368,7 +368,7 @@ def show_sidebar_branding():
         
         st.markdown(
             """
-            <p style='text-align: center; font-size: 12px; color: #64748B;'>
+            <p style='text-align: center; font-size: 20px; font-weight: bold; color: #1E3A8A; margin-top: 10px;'>
                 AI管理部長
             </p>
             """,
