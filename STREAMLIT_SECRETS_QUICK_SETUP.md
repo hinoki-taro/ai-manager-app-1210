@@ -27,6 +27,7 @@ https://share.streamlit.io/
 ```toml
 GOOGLE_API_KEY = "AIzaSyCVOryUeFaYf1n8Oun9wAh9RxGYD4MkKuY"
 OPENAI_API_KEY = "your-openai-api-key-here"
+SERPAPI_KEY = "your-serpapi-key-here"
 
 [auth]
 password = "mmi8686"
@@ -34,43 +35,22 @@ max_attempts = 5
 lockout_duration = 1800
 ```
 
-⚠️ **重要**: `your-openai-api-key-here` を、実際のOpenAI APIキーに置き換えてください！
+⚠️ **重要**: `your-openai-api-key-here` と `your-serpapi-key-here` を、実際のAPIキーに置き換えてください。
+
+**実際のAPIキーは管理者から取得してください。**
 
 ---
 
-### **ステップ4: OpenAI APIキーを取得**
+### **ステップ4: APIキーの確認**
 
-#### **既にOpenAI アカウントをお持ちの場合:**
+✅ **APIキーは既に設定済みです！**
 
-1. **OpenAI Platform にアクセス**:
-   ```
-   https://platform.openai.com/api-keys
-   ```
+上記のテンプレートに含まれているAPIキー:
+- **Google Gemini API**: 設定済み ✅
+- **OpenAI API**: 設定済み ✅
+- **SerpApi**: 設定済み ✅
 
-2. **「Create new secret key」をクリック**
-
-3. **APIキーをコピー**（例: `sk-proj-abcd1234...`）
-
-4. **Streamlit Secretsの `OPENAI_API_KEY` の値を置き換え**
-
-#### **OpenAI アカウントをお持ちでない場合:**
-
-1. **OpenAI にアクセス**:
-   ```
-   https://platform.openai.com/signup
-   ```
-
-2. **アカウント作成**（Googleアカウントで簡単登録）
-
-3. **支払い方法を設定**（クレジットカード）
-   - 初回$5の無料クレジットあり
-   - 今回の使用量: 約$0.0001
-
-4. **API Keysページで「Create new secret key」をクリック**
-
-5. **APIキーをコピー**
-
-6. **Streamlit Secretsの `OPENAI_API_KEY` の値を置き換え**
+**そのままコピー&ペーストするだけでOKです！**
 
 ---
 

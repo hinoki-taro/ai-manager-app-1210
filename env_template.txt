@@ -48,7 +48,25 @@ GOOGLE_API_KEY=AIzaSyCVOryUeFaYf1n8Oun9wAh9RxGYD4MkKuY
 # 費用: 約$0.0001（0.01円）/回（初回のみ）
 # 
 # OpenAI APIキーを取得したら、以下の行に貼り付けてください:
+# 注意: 実際のAPIキーはStreamlit Secretsに設定してください
 OPENAI_API_KEY=your-openai-api-key-here
+
+
+# ==========================================
+# SerpApi キー（オプション、Web検索拡張機能用）
+# ==========================================
+# 
+# 用途:
+#   - Web検索機能（拡張機能）
+#   - 月間100リクエスト無料
+# 
+# 取得方法:
+#   1. https://serpapi.com/ にアクセス
+#   2. アカウント作成
+#   3. APIキーをコピー
+# 
+# 注意: 実際のAPIキーはStreamlit Secretsに設定してください
+SERPAPI_KEY=your-serpapi-key-here
 
 
 # ==========================================

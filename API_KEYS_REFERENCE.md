@@ -33,10 +33,10 @@ cat .env | grep GOOGLE_API_KEY
 
 ---
 
-### **OpenAI API キー** ⚠️
+### **OpenAI API キー** ✅
 
-**ステータス**: 設定が必要  
-**場所**: `.env` ファイル（追加予定）  
+**ステータス**: 設定済み  
+**場所**: `.env` ファイル  
 **変数名**: `OPENAI_API_KEY`  
 **形式**: `sk-proj-...`（100文字以上）
 
@@ -44,11 +44,24 @@ cat .env | grep GOOGLE_API_KEY
 - ✅ ベクターストアの読み込み（必須）
 - ⚠️ 費用: 約$0.0001（0.01円）/回
 
-**取得方法:**
-1. https://platform.openai.com/api-keys にアクセス
-2. 「Create new secret key」をクリック
-3. APIキーをコピー
-4. `.env` ファイルに追加
+**取得元:**
+- https://platform.openai.com/api-keys
+
+---
+
+### **SerpApi キー** ✅
+
+**ステータス**: 設定済み（オプション）  
+**場所**: `.env` ファイル  
+**変数名**: `SERPAPI_KEY`  
+**形式**: 64文字のハッシュ
+
+**用途:**
+- ✅ Web検索機能（拡張機能）
+- ⚠️ 月間100リクエスト無料
+
+**取得元:**
+- https://serpapi.com/
 
 ---
 

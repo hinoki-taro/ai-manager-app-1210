@@ -95,13 +95,16 @@ OPENAI_API_KEY=sk-proj-ここにあなたのAPIキーを貼り付け
 
 ```toml
 GOOGLE_API_KEY = "AIzaSyCVOryUeFaYf1n8Oun9wAh9RxGYD4MkKuY"
-OPENAI_API_KEY = "sk-proj-ここにあなたのAPIキーを貼り付け"
+OPENAI_API_KEY = "your-openai-api-key-here"
+SERPAPI_KEY = "your-serpapi-key-here"
 
 [auth]
 password = "mmi8686"
 max_attempts = 5
 lockout_duration = 1800
 ```
+
+⚠️ **重要**: `your-openai-api-key-here` と `your-serpapi-key-here` を実際のAPIキーに置き換えてください。
 
 ⚠️ **チェックポイント**:
 - [ ] `GOOGLE_API_KEY` が1行目

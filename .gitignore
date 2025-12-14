@@ -247,4 +247,6 @@ desktop.ini
 *~
 
 # 起動スクリプト（APIキーを含む場合は除外）
-# start_app.bat
+# start_app.bat  
+# Actual API keys (confidential)  
+API_KEYS_ACTUAL.md 
