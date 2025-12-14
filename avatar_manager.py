@@ -16,7 +16,7 @@ from pathlib import Path
 class LogoManager:
     """ロゴ管理クラス"""
     
-    LOGO_PATH = "assets/images/mm_logo.png"
+    LOGO_PATH = "assets/images/mm_logo.svg"
     LOGO_PLACEHOLDER_SVG = """
     <svg width="200" height="80" xmlns="http://www.w3.org/2000/svg">
         <rect width="200" height="80" fill="#1E3A8A" rx="10"/>
@@ -74,7 +74,7 @@ class LogoManager:
 class AvatarManager:
     """アバター管理クラス"""
     
-    AVATAR_PATH = "assets/images/manager_avatar.png"
+    AVATAR_PATH = "assets/images/manager_avatar.jfif"
     
     # かわいい管理部長アバター（40代男性）のSVG
     AVATAR_SVG = """

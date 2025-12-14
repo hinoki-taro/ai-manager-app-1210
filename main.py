@@ -173,7 +173,7 @@ if chat_message:
     logger.info({"message": chat_message, "application_mode": st.session_state.mode})
 
     # ユーザーメッセージを表示
-    with st.chat_message("user"):
+    with st.chat_message("user", avatar="👤"):
         st.markdown(chat_message)
 
     # ==========================================
@@ -197,7 +197,7 @@ if chat_message:
     # ==========================================
     # 7-3. LLMからの回答表示
     # ==========================================
-    with st.chat_message("assistant"):
+    with st.chat_message("assistant", avatar=avatar_manager.AvatarManager.AVATAR_PATH):
         try:
             # ==========================================
             # モードが「社内文書検索」の場合

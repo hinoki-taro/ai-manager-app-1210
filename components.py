@@ -8,6 +8,7 @@
 import streamlit as st
 import utils
 import constants as ct
+import avatar_manager
 
 
 ############################################################
@@ -107,7 +108,9 @@ def display_conversation_log():
     # 会話ログのループ処理
     for message in st.session_state.messages:
         # 「message」辞書の中の「role」キーには「user」か「assistant」が入っている
-        with st.chat_message(message["role"]):
+        # アバターを設定（ユーザーは絵文字、AIは画像）
+        avatar = "👤" if message["role"] == "user" else avatar_manager.AvatarManager.AVATAR_PATH
+        with st.chat_message(message["role"], avatar=avatar):
 
             # ユーザー入力値の場合、そのままテキストを表示するだけ
             if message["role"] == "user":
