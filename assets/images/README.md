@@ -155,7 +155,11 @@ PNG transparent background
 
 ## 📸 現在配置されている画像
 
-1. **`mm_logo.svg`** - 会社ロゴ（SVG形式）
+### **使用中のファイル:**
+1. **`company_logo.svg`** - 会社ロゴ（SVG形式）
 2. **`ai_manager_avatar.png`** - AI管理部長アバター（PNG形式、246KB）
-3. **`manager_avatar.jfif`** - 旧アバター（非推奨）
+
+### **バックアップ:**
+- **`backups/company_logo_original.svg`** - オリジナルロゴ
+- **`backups/avatar_original.png`** - オリジナルアバター
 

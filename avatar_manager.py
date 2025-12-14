@@ -16,7 +16,7 @@ from pathlib import Path
 class LogoManager:
     """ロゴ管理クラス"""
     
-    LOGO_PATH = "assets/images/mm_logo.svg"
+    LOGO_PATH = "assets/images/company_logo.svg"
     LOGO_PLACEHOLDER_SVG = """
     <svg width="200" height="80" xmlns="http://www.w3.org/2000/svg">
         <rect width="200" height="80" fill="#1E3A8A" rx="10"/>
