@@ -17,10 +17,6 @@ import json
 import datetime
 from typing import Optional
 from pathlib import Path
-try:
-    from streamlit.web.server.websocket_headers import _get_websocket_headers
-except ImportError:
-    _get_websocket_headers = None
 
 
 def hash_password(password: str) -> str:
@@ -43,9 +39,9 @@ def get_client_ip() -> str:
         str: IPアドレス（取得できない場合は"unknown"）
     """
     try:
-        # Streamlit Cloudの場合、X-Forwarded-Forヘッダーから取得
-        if _get_websocket_headers:
-            headers = _get_websocket_headers()
+        # Streamlit Cloudの場合、st.context.headersから取得（推奨方法）
+        if hasattr(st, 'context') and hasattr(st.context, 'headers'):
+            headers = st.context.headers
             if headers and "X-Forwarded-For" in headers:
                 # X-Forwarded-Forは複数のIPをカンマ区切りで含む可能性があるため、最初のIPを取得
                 ip = headers["X-Forwarded-For"].split(",")[0].strip()
