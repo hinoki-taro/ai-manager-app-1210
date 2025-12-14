@@ -32,6 +32,7 @@ def display_select_mode():
         st.session_state.mode = st.radio(
             label="利用目的を選択してください",
             options=[ct.ANSWER_MODE_1, ct.ANSWER_MODE_2],
+            index=1,  # デフォルトで「社内問い合わせ」を選択
             label_visibility="collapsed"
         )
 
@@ -43,9 +44,14 @@ def display_help_section():
     with st.sidebar:
         st.markdown("---")
         with st.expander("📚 ヘルプ・使い方", expanded=False):
+            # 検索アイコンを表示
+            col1, col2 = st.columns([1, 5])
+            with col1:
+                avatar_manager.show_icon("inquiry", size=40)
+            with col2:
+                st.markdown("#### クイックガイド")
+            
             st.markdown("""
-#### 🎯 クイックガイド
-
 **質問のコツ:**
 - ✅ 具体的に聞く
 - ✅ 1つずつ質問
@@ -187,6 +193,11 @@ def display_search_llm_response(llm_response):
     """
     # LLMからのレスポンスに参照元情報が入っており、かつ「該当資料なし」が回答として返された場合
     if llm_response["context"] and llm_response["answer"] != ct.NO_DOC_MATCH_ANSWER:
+        
+        # 成功アイコンを表示
+        col1, col2 = st.columns([1, 20])
+        with col1:
+            avatar_manager.show_icon("success", size=32)
 
         # ==========================================
         # ユーザー入力値と最も関連性が高いメインドキュメントのありかを表示
@@ -287,8 +298,11 @@ def display_search_llm_response(llm_response):
     
     # LLMからのレスポンスに、ユーザー入力値と関連性の高いドキュメント情報が入って「いない」場合
     else:
+        # 空状態のイラストを表示
+        avatar_manager.show_empty_state("入力内容と関連する社内文書が見つかりませんでした")
+        
         # 関連ドキュメントが取得できなかった場合のメッセージ表示
-        st.markdown(ct.NO_DOC_MATCH_MESSAGE)
+        st.info("入力内容を変更してみてください。", icon="💡")
 
         # 表示用の会話ログに格納するためのデータを用意
         # - 「mode」: モード（「社内文書検索」or「社内問い合わせ」）
