@@ -361,7 +361,17 @@ class ErrorHandler:
         
         # レート制限エラー
         if "rate" in error_str or "quota" in error_str or "429" in error_str:
-            return "APIの利用制限に達しました。しばらく待ってから再度お試しください。"
+            return """⚠️ APIの利用制限に達しました。
+
+**考えられる原因：**
+- Google Gemini APIの無料枠の制限に達しています
+- 短時間に多くのリクエストが送信されました
+
+**対処法：**
+1. 数分待ってから再度お試しください
+2. それでも解決しない場合は、管理者にお問い合わせください
+
+※ このエラーが頻繁に発生する場合は、APIキーの確認が必要です。"""
         
         # タイムアウトエラー
         if "timeout" in error_str:
