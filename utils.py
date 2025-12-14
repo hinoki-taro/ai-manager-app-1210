@@ -66,7 +66,7 @@ def build_error_message(message):
     Returns:
         エラーメッセージと管理者問い合わせテンプレートの連結テキスト
     """
-    return "\n".join([message, ct.COMMON_ERROR_MESSAGE])
+    return "\n".join([f"❌ {message}", ct.COMMON_ERROR_MESSAGE])
 
 
 def get_llm_response(chat_message):

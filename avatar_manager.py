@@ -1,11 +1,14 @@
 """
 アバター・ロゴ管理モジュール
 会社ロゴと管理部長アバターの表示とアニメーション機能を提供します。
+また、UI強化のためのアイコン、背景、イラスト機能も統合しています。
 
 使用方法:
     import avatar_manager
     avatar_manager.show_company_logo()
     avatar_manager.show_manager_avatar(talking=True)
+    avatar_manager.show_icon("search", size=48)
+    avatar_manager.show_message_success("成功しました！")
 """
 
 import streamlit as st
@@ -467,6 +470,160 @@ def demo_avatar_showcase():
         show_chat_avatar("JINNYは1,000台以上導入されています！", is_user=False)
         show_chat_avatar("会社の設立年はいつですか？", is_user=True)
         show_chat_avatar("2004年に設立されました。", is_user=False)
+
+
+# ============================================================
+# UI強化機能（アイコン・背景・イラスト）
+# ============================================================
+
+class IconManager:
+    """アイコン管理クラス"""
+    
+    ICONS_DIR = Path("assets/images/icons")
+    
+    @staticmethod
+    def show_icon(icon_type: str, size: int = 48):
+        """
+        アイコンを表示
+        
+        Args:
+            icon_type: アイコンの種類 (search/document/inquiry/success/warning/error/loading)
+            size: アイコンのサイズ（ピクセル）
+        """
+        icon_files = {
+            "search": "search_icon.svg",
+            "document": "document_icon.svg",
+            "inquiry": "inquiry_icon.svg",
+            "success": "success_icon.svg",
+            "warning": "warning_icon.svg",
+            "error": "error_icon.svg",
+            "loading": "loading_icon.svg",
+        }
+        
+        icon_file = icon_files.get(icon_type)
+        if icon_file:
+            icon_path = IconManager.ICONS_DIR / icon_file
+            if icon_path.exists():
+                st.image(str(icon_path), width=size)
+                return
+        
+        # フォールバック：絵文字
+        emoji_map = {
+            "search": "🔍",
+            "document": "📄",
+            "inquiry": "💬",
+            "success": "✅",
+            "warning": "⚠️",
+            "error": "❌",
+            "loading": "⏳",
+        }
+        st.markdown(f"<span style='font-size: {size}px;'>{emoji_map.get(icon_type, '❓')}</span>", 
+                   unsafe_allow_html=True)
+
+
+class MessageBox:
+    """メッセージボックス（アイコン付き）"""
+    
+    @staticmethod
+    def success(message: str):
+        """成功メッセージ"""
+        col1, col2 = st.columns([1, 20])
+        with col1:
+            IconManager.show_icon("success", size=24)
+        with col2:
+            st.success(message, icon="✅")
+    
+    @staticmethod
+    def info(message: str):
+        """情報メッセージ"""
+        col1, col2 = st.columns([1, 20])
+        with col1:
+            IconManager.show_icon("document", size=24)
+        with col2:
+            st.info(message, icon="ℹ️")
+    
+    @staticmethod
+    def warning(message: str):
+        """警告メッセージ"""
+        col1, col2 = st.columns([1, 20])
+        with col1:
+            IconManager.show_icon("warning", size=24)
+        with col2:
+            st.warning(message, icon="⚠️")
+    
+    @staticmethod
+    def error(message: str):
+        """エラーメッセージ"""
+        col1, col2 = st.columns([1, 20])
+        with col1:
+            IconManager.show_icon("error", size=24)
+        with col2:
+            st.error(message, icon="❌")
+
+
+class IllustrationManager:
+    """イラスト管理クラス"""
+    
+    DECORATIONS_DIR = Path("assets/images/decorations")
+    
+    @staticmethod
+    def show_empty_state(message: str = "データがありません", size: int = 200):
+        """
+        空状態を表示
+        
+        Args:
+            message: メッセージ
+            size: イラストのサイズ
+        """
+        col1, col2, col3 = st.columns([1, 2, 1])
+        
+        with col2:
+            empty_state_path = IllustrationManager.DECORATIONS_DIR / "empty_state.svg"
+            if empty_state_path.exists():
+                st.image(str(empty_state_path), width=size)
+            
+            st.markdown(
+                f"""
+                <p style="text-align: center; color: #64748B; font-size: 18px; font-weight: 500;">
+                    {message}
+                </p>
+                """,
+                unsafe_allow_html=True
+            )
+
+
+# ============================================================
+# 便利関数（グローバル）
+# ============================================================
+
+def show_icon(icon_type: str, size: int = 48):
+    """アイコンを表示（グローバル関数）"""
+    IconManager.show_icon(icon_type, size)
+
+
+def show_message_success(message: str):
+    """成功メッセージを表示（グローバル関数）"""
+    MessageBox.success(message)
+
+
+def show_message_info(message: str):
+    """情報メッセージを表示（グローバル関数）"""
+    MessageBox.info(message)
+
+
+def show_message_warning(message: str):
+    """警告メッセージを表示（グローバル関数）"""
+    MessageBox.warning(message)
+
+
+def show_message_error(message: str):
+    """エラーメッセージを表示（グローバル関数）"""
+    MessageBox.error(message)
+
+
+def show_empty_state(message: str = "データがありません"):
+    """空状態を表示（グローバル関数）"""
+    IllustrationManager.show_empty_state(message)
 
 
 if __name__ == "__main__":

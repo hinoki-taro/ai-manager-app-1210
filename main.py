@@ -33,45 +33,11 @@ st.set_page_config(
     page_title=ct.APP_NAME
 )
 
-# カスタムCSSでフォントサイズを大きく設定
-st.markdown("""
-<style>
-    /* 全体のフォントサイズを16pxに設定 */
-    html, body, [class*="css"] {
-        font-size: 16px;
-    }
-    
-    /* 入力欄とボタンのフォントサイズ */
-    .stTextInput, .stTextArea, .stSelectbox, .stMultiSelect, .stNumberInput {
-        font-size: 16px;
-    }
-    
-    /* チャットメッセージのフォントサイズ */
-    .stChatMessage {
-        font-size: 16px;
-    }
-    
-    /* サイドバーのフォントサイズ */
-    .css-1d391kg, [data-testid="stSidebar"] {
-        font-size: 16px;
-    }
-    
-    /* マークダウンテキストのフォントサイズ */
-    .stMarkdown {
-        font-size: 16px;
-    }
-    
-    /* ラジオボタン、チェックボックスなどのフォントサイズ */
-    .stRadio label, .stCheckbox label {
-        font-size: 16px;
-    }
-    
-    /* チャット入力欄のフォントサイズ */
-    .stChatInputContainer textarea {
-        font-size: 16px;
-    }
-</style>
-""", unsafe_allow_html=True)
+# カスタムCSS + JavaScriptを適用（エムエムインターナショナルブランド）
+import ui_styles
+import ui_javascript
+ui_styles.apply_custom_css()
+ui_javascript.apply_javascript_features()
 
 # アバター・ロゴ用のスタイルを適用
 avatar_manager.apply_avatar_styles()
