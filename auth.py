@@ -209,8 +209,8 @@ def check_password() -> bool:
     if hasattr(st, "secrets") and "auth" in st.secrets:
         timeout_minutes = int(st.secrets["auth"].get("session_timeout_minutes", timeout_minutes))
     
-    # 最大ログイン試行回数の取得
-    max_attempts = int(os.getenv("MAX_LOGIN_ATTEMPTS", "5"))
+    # 最大ログイン試行回数の取得（デフォルト3回）
+    max_attempts = int(os.getenv("MAX_LOGIN_ATTEMPTS", "3"))
     if hasattr(st, "secrets") and "auth" in st.secrets:
         max_attempts = int(st.secrets["auth"].get("max_login_attempts", max_attempts))
     
@@ -226,11 +226,11 @@ def check_password() -> bool:
             st.rerun()
         return True
     
-    # ログイン試行回数のチェック
-    failed_attempts = get_failed_attempts(minutes=10)
+    # ログイン試行回数のチェック（6時間以内）
+    failed_attempts = get_failed_attempts(minutes=360)
     if failed_attempts >= max_attempts:
-        st.error(f"🚫 ログイン試行回数が上限に達しました。10分後に再度お試しください。")
-        st.caption(f"過去10分間に{failed_attempts}回の失敗した試行がありました。")
+        st.error(f"🚫 ログイン試行回数が上限に達しました。6時間後に再度お試しください。")
+        st.caption(f"過去6時間に{failed_attempts}回の失敗した試行がありました。")
         st.stop()
         return False
     
@@ -242,7 +242,7 @@ def check_password() -> bool:
     with st.expander("🛡️ セキュリティ情報"):
         st.markdown(f"""
         - **セッションタイムアウト：** {timeout_minutes}分
-        - **ログイン試行制限：** 10分間に{max_attempts}回まで
+        - **ログイン試行制限：** {max_attempts}回まで（6時間ロックアウト）
         - **アクセスログ：** 記録されています
         """)
     
