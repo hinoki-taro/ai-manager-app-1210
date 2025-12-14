@@ -12,6 +12,7 @@ import streamlit as st
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.messages import HumanMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
 from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 import constants as ct
@@ -142,19 +143,28 @@ def get_llm_response(chat_message):
                 "from_cache": True
             }
         
-        # 4. LLMのオブジェクトを用意（Google Gemini）
+        # 4. LLMのオブジェクトを用意（OpenAI or Google Gemini）
         # APIキーの取得（環境変数またはStreamlit Secrets）
+        openai_api_key = os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY")
         google_api_key = os.getenv("GOOGLE_API_KEY") or st.secrets.get("GOOGLE_API_KEY")
         
-        if not google_api_key:
-            raise ValueError("GOOGLE_API_KEY が設定されていません。")
-        
-        llm = ChatGoogleGenerativeAI(
-            model=ct.MODEL,
-            temperature=ct.TEMPERATURE,
-            max_retries=2,  # リトライ回数を設定
-            google_api_key=google_api_key  # APIキーを明示的に渡す
-        )
+        # OpenAI APIキーが利用可能な場合はOpenAIを優先使用
+        if openai_api_key:
+            llm = ChatOpenAI(
+                model="gpt-3.5-turbo",
+                temperature=ct.TEMPERATURE,
+                max_retries=2,
+                openai_api_key=openai_api_key
+            )
+        elif google_api_key:
+            llm = ChatGoogleGenerativeAI(
+                model=ct.MODEL,
+                temperature=ct.TEMPERATURE,
+                max_retries=2,
+                google_api_key=google_api_key
+            )
+        else:
+            raise ValueError("OPENAI_API_KEY または GOOGLE_API_KEY が設定されていません。")
 
         # 5. 会話履歴なしでもLLMに理解してもらえる、独立した入力テキストを取得するためのプロンプトテンプレートを作成
         question_generator_template = ct.SYSTEM_PROMPT_CREATE_INDEPENDENT_TEXT
