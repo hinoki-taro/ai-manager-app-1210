@@ -18,7 +18,7 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 import constants as ct
 from langchain_enhanced import (
     get_rate_limiter,
-    get_query_cache,
+    # get_query_cache,  # キャッシュ機能を無効化
     get_langchain_logger,
     get_conversation_manager,
     InputValidator,
@@ -159,7 +159,7 @@ def get_llm_response(chat_message):
     
     # インスタンスを取得
     rate_limiter = get_rate_limiter()
-    query_cache = get_query_cache()
+    # query_cache = get_query_cache()  # キャッシュ機能を無効化
     logger = get_langchain_logger()
     conversation_manager = get_conversation_manager()
     
@@ -190,26 +190,26 @@ def get_llm_response(chat_message):
         if remaining <= 3:
             st.info(f"ℹ️ 残りリクエスト数: {remaining}回（1分ごとにリセット）")
         
-        # 3. キャッシュチェック
-        cached_answer = query_cache.get(chat_message, max_age=3600)
-        if cached_answer:
-            st.info("💡 キャッシュから回答を取得しました")
-            
-            # キャッシュからの回答をログに記録
-            logger.log_query(
-                query=chat_message,
-                answer=cached_answer,
-                sources=["cache"],
-                elapsed_time=time.time() - start_time,
-                success=True
-            )
-            
-            # 回答を返す（簡易版）
-            return {
-                "answer": cached_answer,
-                "context": [],
-                "from_cache": True
-            }
+        # 3. キャッシュチェック（無効化）
+        # cached_answer = query_cache.get(chat_message, max_age=3600)
+        # if cached_answer:
+        #     st.info("💡 キャッシュから回答を取得しました")
+        #     
+        #     # キャッシュからの回答をログに記録
+        #     logger.log_query(
+        #         query=chat_message,
+        #         answer=cached_answer,
+        #         sources=["cache"],
+        #         elapsed_time=time.time() - start_time,
+        #         success=True
+        #     )
+        #     
+        #     # 回答を返す（簡易版）
+        #     return {
+        #         "answer": cached_answer,
+        #         "context": [],
+        #         "from_cache": True
+        #     }
         
         # 4. LLMのオブジェクトを用意（OpenAI優先、フォールバックはGoogle Gemini）
         # APIキーの取得（環境変数またはStreamlit Secrets）
@@ -292,8 +292,8 @@ def get_llm_response(chat_message):
             llm_response["answer"]
         ])
         
-        # 13. キャッシュに保存
-        query_cache.set(chat_message, llm_response["answer"])
+        # 13. キャッシュに保存（無効化）
+        # query_cache.set(chat_message, llm_response["answer"])
         
         # 14. 参照元を取得
         sources = [doc.metadata.get("source", "unknown") for doc in llm_response.get("context", [])]
