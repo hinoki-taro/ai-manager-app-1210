@@ -216,15 +216,15 @@ def get_llm_response(chat_message):
         openai_api_key = os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY")
         google_api_key = os.getenv("GOOGLE_API_KEY") or st.secrets.get("GOOGLE_API_KEY")
         
-        # OpenAI APIキーが利用可能な場合はOpenAIを優先使用（制限回避のため）
+        # OpenAI APIキーが利用可能な場合はOpenAIを優先使用（gpt-4o-miniは128kコンテキスト対応）
         if openai_api_key:
             llm = ChatOpenAI(
-                model="gpt-3.5-turbo",
+                model=ct.MODEL_OPENAI,  # gpt-4o-mini (128k context)
                 temperature=ct.TEMPERATURE,
                 max_retries=2,
                 openai_api_key=openai_api_key
             )
-            st.session_state.setdefault("llm_type", "OpenAI")
+            st.session_state.setdefault("llm_type", "OpenAI (gpt-4o-mini)")
         elif google_api_key:
             llm = ChatGoogleGenerativeAI(
                 model=ct.MODEL,
